@@ -6,6 +6,7 @@
 
 #include "args.hxx"
 #include "utils.hpp"
+#include <chrono>
 
 namespace odgi {
 
@@ -68,8 +69,8 @@ namespace odgi {
 			}
 		}
 
-//		std::cerr << graph.get_node_count() << std::endl;
-
+		std::cout << "Finished reading graph" << std::endl;
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 		std::vector<path_handle_t> paths;
 		paths.reserve(graph.get_path_count());
 		graph.for_each_path_handle([&](const path_handle_t &path) {
@@ -83,13 +84,16 @@ namespace odgi {
 				num_steps++;
 			});
 #pragma omp critical (cout)
-			std::cerr << graph.get_path_name(path) << ": " << num_steps << std::endl;
+			std::cout << graph.get_path_name(path) << ": " << num_steps << std::endl;
 		}
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        std::cerr << "Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "ms" << std::endl;
 
 		return 0;
 	}
 
-	static Subcommand odgi_squeeze("performance", "LJlsjföl multiple graphs in ODGI format into the same file in ODGI format.",
+	static Subcommand odgi_performance("performance", "Count the number of steps in a graph by traversing paths in parallel",
 								   PIPELINE, 3, main_performance);
 
 
