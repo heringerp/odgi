@@ -69,7 +69,7 @@ namespace odgi {
 			}
 		}
 
-		std::cout << "Finished reading graph" << std::endl;
+		//std::cout << "Finished reading graph" << std::endl;
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 		std::vector<path_handle_t> paths;
 		paths.reserve(graph.get_path_count());
@@ -83,8 +83,8 @@ namespace odgi {
 			graph.for_each_step_in_path(path, [&](const step_handle_t &step) {
 				num_steps++;
 			});
-#pragma omp critical (cout)
-			std::cout << graph.get_path_name(path) << ": " << num_steps << std::endl;
+//#pragma omp critical (cout)
+			//std::cout << graph.get_path_name(path) << ": " << num_steps << std::endl;
 		}
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
